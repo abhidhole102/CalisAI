@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import os
+import time
 import json
 from google import genai
 
@@ -217,26 +218,78 @@ def analyze():
         training_days
     )
 
-    # Create athlete profile
+   
+
+    goal_strategies = {
+
+    "Build Strength": """
+Focus on balanced full-body strength.
+Prioritize pushing strength, pulling strength,
+lower-body strength and core stability.
+Use progressive bodyweight exercises appropriate
+for the athlete's level.
+""",
+
+    "Muscle-Up": """
+Focus primarily on explosive pulling power,
+high pull-ups, chest-to-bar strength,
+transition mechanics and straight-bar pushing strength.
+""",
+
+    "Handstand": """
+Focus on shoulder strength, wrist preparation,
+handstand line, balance and progressive freestanding practice.
+""",
+
+    "Handstand Push-Up": """
+Focus on overhead pushing strength, pike push-ups,
+wall handstand control, eccentric HSPU work and shoulder stability.
+""",
+
+    "Planche": """
+Focus on straight-arm pushing strength,
+scapular protraction, planche leans,
+pseudo planche push-ups and progressive planche holds.
+""",
+
+    "Front Lever": """
+Focus on straight-arm pulling strength,
+scapular control, tuck front lever progressions,
+front lever rows and core tension.
+"""
+}
+
+    goal_strategy = goal_strategies.get(
+    goal,
+    goal_strategies["Build Strength"]
+)
+
+     # Create athlete profile
     athlete_profile = {
-        "fitness_level": level,
-        "pull_ups": pull_ups,
-        "dips": dips,
-        "push_ups": push_ups,
-        "goal": goal,
-        "training_days": training_days,
-        "equipment": equipment,
-        "current_skill": current_skill
-    }
+            "fitness_level": level,
+            "pull_ups": pull_ups,
+            "dips": dips,
+            "push_ups": push_ups,
+            "goal": goal,
+            "training_days": training_days,
+            "equipment": equipment,
+            "current_skill": current_skill
+        }
+    
 
     prompt = f"""
 You are CalisAI, an intelligent personalized calisthenics workout recommendation system.
 
 Your job is to create a safe, practical and highly personalized training plan.
 
+
 ATHLETE PROFILE:
 
 {athlete_profile}
+
+GOAL-SPECIFIC STRATEGY:
+
+{goal_strategy}
 
 PERSONALIZATION RULES:
 
@@ -268,6 +321,35 @@ PERSONALIZATION RULES:
 11. If the athlete already has a prerequisite skill, move to the next appropriate progression.
 
 12. Keep the workout practical for real-world calisthenics training.
+
+13. Follow the goal-specific strategy when selecting exercises and structuring the workout.
+
+14. STRICT EQUIPMENT RULE:
+    Use ONLY the equipment listed in the athlete profile.
+
+    Never recommend equipment that the athlete does not have.
+
+    For example, if the athlete has only:
+    - Pull-up bar
+    - Parallel bars
+
+    then do NOT recommend:
+    - Weighted pull-ups
+    - Weighted dips
+    - Dumbbells
+    - Barbells
+    - Resistance bands
+    - Gym machines
+    - Weight plates
+
+    Bodyweight and floor exercises are always allowed.
+
+    If an exercise normally requires equipment that is not available,
+    replace it with a suitable bodyweight alternative.
+
+    15. Before returning the final JSON, verify every exercise against
+    the athlete's available equipment. Remove or replace any exercise
+    that requires unavailable equipment.
 
 Return ONLY valid JSON.
 
@@ -316,12 +398,52 @@ IMPORTANT:
 - Keep the plan realistic and progressive.
 - Return JSON only. Do not include markdown or explanations outside the JSON.
 """
-    ai_response = client.models.generate_content(
-    model="gemini-3.6-flash",
-    contents=prompt
-)
-    ai_text = ai_response.text.strip()
-    ai_workout = json.loads(ai_text)
+    try:
+        start_time = time.time()
+        ai_response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt
+        )
+
+        end_time = time.time()
+
+        print("Gemini response time:", round(end_time - start_time, 2), "seconds")
+
+        ai_text = ai_response.text.strip()
+        ai_workout = json.loads(ai_text)
+
+    except Exception as e:
+        print("Gemini API Error:", e)
+
+        error_message = str(e)
+
+        # Gemini quota/rate limit
+        if "429" in error_message or "RESOURCE_EXHAUSTED" in error_message:
+            return jsonify({
+                "error": "AI_LIMIT",
+                "message": "Gemini API limit reached. Please try again later."
+            }), 429
+
+        # Gemini temporary server overload
+        elif "503" in error_message or "UNAVAILABLE" in error_message:
+            return jsonify({
+                "error": "AI_UNAVAILABLE",
+                "message": "AI service is temporarily busy. Please try again in a moment."
+            }), 503
+
+        # Invalid AI response / JSON problem
+        elif "JSON" in error_message or "json" in error_message:
+            return jsonify({
+                "error": "AI_RESPONSE_ERROR",
+                "message": "AI generated an invalid workout response. Please try again."
+            }), 500
+
+        # Any other unexpected error
+        else:
+            return jsonify({
+                "error": "AI_ERROR",
+                "message": "Something went wrong while generating your workout."
+            }), 500
 
     # Send result back to JavaScript
     return jsonify({
@@ -334,7 +456,6 @@ IMPORTANT:
         "workout": workout,
         "aiWorkout": ai_workout
     })
-
 
 if __name__ == "__main__":
     app.run(debug=True)

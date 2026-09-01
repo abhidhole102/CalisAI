@@ -30,9 +30,36 @@ function validateInputs(
 }
 
 
-form.addEventListener("submit", async function(event) {
+form.addEventListener("submit", async function (event) {
 
     event.preventDefault();
+
+    // Prevent multiple requests
+    const generateButton = form.querySelector(".generate");
+
+    if (generateButton.disabled) {
+        return;
+    }
+
+    generateButton.disabled = true;
+    generateButton.textContent = "BUILDING YOUR PLAN...";
+
+    result.classList.remove("hidden");
+
+    result.innerHTML = `
+    <div class="ai-loading">
+        <div class="loading-mark">CALISAI</div>
+        <h3>BUILDING YOUR PLAN...</h3>
+        <p>
+            Analyzing your strength, goal, equipment
+            and current skill.
+        </p>
+        <div class="loading-line"></div>
+    </div>
+`;
+
+    generateButton.disabled = false;
+    generateButton.textContent = "GENERATE MY PLAN ↗";
 
 
     const pullUps =
@@ -85,32 +112,62 @@ form.addEventListener("submit", async function(event) {
 
     try {
 
-        const response = await fetch("/api/analyze", {
+        let response;
+        let data;
 
-            method: "POST",
+        try {
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+            response = await fetch("/api/analyze", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    pullUps: pullUps,
+                    dips: dips,
+                    pushUps: pushUps,
+                    goal: goal,
+                    trainingDays: trainingDays,
+                    equipment: equipment,
+                    currentSkill: currentSkill
+                })
+            });
 
-            body: JSON.stringify({
-                pullUps: pullUps,
-                dips: dips,
-                pushUps: pushUps,
-                goal: goal,
-                trainingDays: trainingDays,
-                equipment: equipment,
-                currentSkill: currentSkill
-            })
-        });
+            data = await response.json();
 
+            if (!response.ok) {
+                throw new Error(data.error || "Request failed");
+            }
 
-        if (!response.ok) {
-            throw new Error("Server error: " + response.status);
+        } catch (error) {
+
+            console.error("CalisAI Error:", error);
+
+            result.classList.remove("hidden");
+
+            result.innerHTML = `
+        <div class="ai-error">
+            <div class="error-mark">CALISAI</div>
+
+            <h3>AI TEMPORARILY UNAVAILABLE</h3>
+
+            <p>
+                We couldn't generate your workout right now.
+                This may be because the AI service is temporarily
+                busy or your request limit has been reached.
+            </p>
+
+            <p class="sub">
+                Please wait a little and try again.
+            </p>
+        </div>
+    `;
+
+            generateButton.disabled = false;
+            generateButton.textContent = "GENERATE MY PLAN ↗";
+
+            return;
         }
-
-
-        const data = await response.json();
 
         const level = data.level;
         const aiWorkout = data.aiWorkout;
@@ -139,9 +196,9 @@ form.addEventListener("submit", async function(event) {
             <h4>AI Personalized Workout</h4>
 
 
-            ${aiWorkout.days.map(function(day) {
+            ${aiWorkout.days.map(function (day) {
 
-                return `
+            return `
 
                     <div class="workout-day">
 
@@ -151,9 +208,9 @@ form.addEventListener("submit", async function(event) {
 
                         <ul>
 
-                            ${day.exercises.map(function(exercise) {
+                            ${day.exercises.map(function (exercise) {
 
-                                return `
+                return `
 
                                     <li>
 
@@ -173,7 +230,7 @@ form.addEventListener("submit", async function(event) {
 
                                 `;
 
-                            }).join("")}
+            }).join("")}
 
                         </ul>
 
@@ -181,18 +238,18 @@ form.addEventListener("submit", async function(event) {
 
                 `;
 
-            }).join("")}
+        }).join("")}
 
 
             <h4>Progression</h4>
 
             <ol>
 
-                ${aiWorkout.progression.map(function(step) {
+                ${aiWorkout.progression.map(function (step) {
 
-                    return `<li>${step}</li>`;
+            return `<li>${step}</li>`;
 
-                }).join("")}
+        }).join("")}
 
             </ol>
 
@@ -201,11 +258,11 @@ form.addEventListener("submit", async function(event) {
 
             <ul>
 
-                ${aiWorkout.tips.map(function(tip) {
+                ${aiWorkout.tips.map(function (tip) {
 
-                    return `<li>${tip}</li>`;
+            return `<li>${tip}</li>`;
 
-                }).join("")}
+        }).join("")}
 
             </ul>
 
@@ -242,5 +299,22 @@ form.addEventListener("submit", async function(event) {
         `;
 
     }
+
+});
+
+// Skill card -> AI Coach
+document.querySelectorAll(".skill-start").forEach(button => {
+
+    button.addEventListener("click", function () {
+
+        const selectedGoal = this.dataset.goal;
+
+        const goalSelect = document.getElementById("goal");
+
+        if (goalSelect) {
+            goalSelect.value = selectedGoal;
+        }
+
+    });
 
 });

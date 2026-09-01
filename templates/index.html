@@ -9,8 +9,17 @@
 </head>
 
 <body>
-    <header class="nav"><a class="brand" href="#home">CALIS<span>AI</span></a>
-        <nav><a href="#coach">AI Coach</a><a href="#skills">Skills</a><a href="#journey">Journey</a></nav>
+    <header class="nav">
+        <a class="brand" href="#home">CALIS<span>AI</span></a>
+
+        <nav>
+            <a href="#coach">AI Coach</a>
+            <a href="#skills">Skills</a>
+            <a href="#workouts">Workouts</a>
+            <a href="#journey">Journey</a>
+            <a href="#resources">Resources</a>
+        </nav>
+
         <a class="navcta" href="#coach">START TRAINING</a>
     </header>
     <main>
@@ -63,59 +72,329 @@
                         <option>5</option>
                         <option>6</option>
                     </select></label>
-                    <label>Available Equipment
-    <select id="equipment" required>
-        <option value="">Choose</option>
-        <option value="No equipment">No equipment</option>
-        <option value="Pull-up bar">Pull-up bar</option>
-        <option value="Pull-up bar and parallel bars">
-            Pull-up bar + parallel bars
-        </option>
-        <option value="Full calisthenics setup">
-            Full calisthenics setup
-        </option>
-    </select>
-</label>
+                <label>Available Equipment
+                    <select id="equipment" required>
+                        <option value="">Choose</option>
+                        <option value="No equipment">No equipment</option>
+                        <option value="Pull-up bar">Pull-up bar</option>
+                        <option value="Pull-up bar and parallel bars">
+                            Pull-up bar + parallel bars
+                        </option>
+                        <option value="Full calisthenics setup">
+                            Full calisthenics setup
+                        </option>
+                    </select>
+                </label>
 
 
-<label>Current Skill
-    <input
-        id="currentSkill"
-        type="text"
-        placeholder="e.g. Chest-to-bar pull-up"
-        required
-    >
-</label>
-                <label class="wide">Equipment<input id="equipment"
-                        placeholder="Pull-up bar, rings, parallel bars..."></label>
+                <label>Current Skill
+                    <input id="currentSkill" type="text" placeholder="e.g. Chest-to-bar pull-up" required>
+                </label>
+
                 <button class="generate wide">GENERATE MY PLAN ↗</button>
             </form>
             <div id="result" class="result hidden"></div>
         </section>
 
-        <section id="skills" class="section dark">
+       <section id="skills" class="section skills-section">
+
+    <div class="split">
+        <div>
+            <p class="eyebrow">SKILL SYSTEM</p>
+
+            <h2>
+                Master the<br>
+                <em>movement.</em>
+            </h2>
+        </div>
+
+        <p>
+            Every advanced calisthenics skill is built through
+            progressive strength, control and consistent practice.
+        </p>
+    </div>
+
+    <div class="skill-grid">
+
+        <!-- Muscle-Up -->
+        <article class="skill-card">
+            <div class="skill-number">01</div>
+
+            <h3>MUSCLE-UP</h3>
+
+            <p>
+                Build explosive pulling power and master the
+                transition from pull to push.
+            </p>
+
+            <div class="skill-path">
+                <span>Chest-to-Bar</span>
+                <b>→</b>
+                <span>High Pull</span>
+                <b>→</b>
+                <span>Transition</span>
+                <b>→</b>
+                <strong>Muscle-Up</strong>
+            </div>
+
+            <a href="#coach" class="skill-start" data-goal="Muscle-Up">
+    START PROGRESSION ↗
+</a>
+        </article>
+
+
+        <!-- Handstand -->
+        <article class="skill-card">
+            <div class="skill-number">02</div>
+
+            <h3>HANDSTAND</h3>
+
+            <p>
+                Develop balance, shoulder control and
+                freestanding handstand strength.
+            </p>
+
+            <div class="skill-path">
+                <span>Wall Hold</span>
+                <b>→</b>
+                <span>Pike Hold</span>
+                <b>→</b>
+                <span>Taps</span>
+                <b>→</b>
+                <strong>Freestanding</strong>
+            </div>
+
+           <a href="#coach" class="skill-start" data-goal="Handstand">
+    START PROGRESSION ↗
+</a>
+        </article>
+
+
+        <!-- Planche -->
+        <article class="skill-card">
+            <div class="skill-number">03</div>
+
+            <h3>PLANCHE</h3>
+
+            <p>
+                Build straight-arm pushing strength and
+                progressive body control.
+            </p>
+
+            <div class="skill-path">
+                <span>Lean</span>
+                <b>→</b>
+                <span>Pseudo Push-Up</span>
+                <b>→</b>
+                <span>Tuck</span>
+                <b>→</b>
+                <strong>Advanced Tuck</strong>
+            </div>
+
+          <a href="#coach" class="skill-start" data-goal="Planche">
+    START PROGRESSION ↗
+</a>
+        </article>
+
+
+        <!-- Front Lever -->
+        <article class="skill-card">
+            <div class="skill-number">04</div>
+
+            <h3>FRONT LEVER</h3>
+
+            <p>
+                Develop scapular strength, core tension and
+                horizontal pulling power.
+            </p>
+
+            <div class="skill-path">
+                <span>Scapular Pull</span>
+                <b>→</b>
+                <span>Tuck</span>
+                <b>→</b>
+                <span>Advanced Tuck</span>
+                <b>→</b>
+                <strong>Front Lever</strong>
+            </div>
+
+           <a href="#coach" class="skill-start" data-goal="Front Lever">
+    START PROGRESSION ↗
+</a>
+        </article>
+
+
+        <!-- HSPU -->
+        <article class="skill-card">
+            <div class="skill-number">05</div>
+
+            <h3>HANDSTAND PUSH-UP</h3>
+
+            <p>
+                Build overhead pressing strength and controlled
+                inverted movement.
+            </p>
+
+            <div class="skill-path">
+                <span>Pike Push-Up</span>
+                <b>→</b>
+                <span>Elevated Pike</span>
+                <b>→</b>
+                <span>Negative</span>
+                <b>→</b>
+                <strong>HSPU</strong>
+            </div>
+
+           <a href="#coach" class="skill-start" data-goal="Handstand Push-Up">
+    START PROGRESSION ↗
+</a>
+        </article>
+
+
+        <!-- Strength -->
+        <article class="skill-card">
+            <div class="skill-number">06</div>
+
+            <h3>BUILD STRENGTH</h3>
+
+            <p>
+                Build the fundamental pushing, pulling and
+                lower-body strength required for advanced skills.
+            </p>
+
+            <div class="skill-path">
+                <span>Push-Ups</span>
+                <b>→</b>
+                <span>Pull-Ups</span>
+                <b>→</b>
+                <span>Dips</span>
+                <b>→</b>
+                <strong>Advanced</strong>
+            </div>
+
+           <a href="#coach" class="skill-start" data-goal="Build Strength">
+    START PROGRESSION ↗
+</a>
+        </article>
+
+    </div>
+
+</section>
+
+        <section id="workouts" class="section workouts">
+
             <div class="split">
                 <div>
-                    <p class="eyebrow">SKILL PROGRESSION</p>
-                    <h2>Every advanced skill<br>starts with a <em>step.</em></h2>
+                    <p class="eyebrow">TRAINING SYSTEM</p>
+
+                    <h2>
+                        Train with<br>
+                        <em>purpose.</em>
+                    </h2>
                 </div>
-                <p>CalisAI breaks difficult movements into achievable progressions so you know what to train next.</p>
+
+                <p>
+                    Build strength, develop skills and improve your
+                    movement with structured calisthenics training.
+                </p>
             </div>
-            <div class="cards">
-                <article><b>01</b>
-                    <h3>Pull</h3>
-                    <p>Pull-up → explosive pull → high pull → muscle-up</p>
+
+            <div class="workout-grid">
+
+                <article class="workout-card">
+                    <span>01</span>
+                    <h3>STRENGTH</h3>
+                    <p>
+                        Build the foundation with push-ups,
+                        pull-ups, dips and lower-body movements.
+                    </p>
+                    <a href="#coach">BUILD STRENGTH ↗</a>
                 </article>
-                <article><b>02</b>
-                    <h3>Push</h3>
-                    <p>Push-up → pike push-up → handstand → HSPU</p>
+
+                <article class="workout-card">
+                    <span>02</span>
+                    <h3>PULL</h3>
+                    <p>
+                        Develop pulling power for muscle-ups,
+                        front levers and advanced pulling skills.
+                    </p>
+                    <a href="#coach">TRAIN PULL ↗</a>
                 </article>
-                <article><b>03</b>
-                    <h3>Planche</h3>
-                    <p>Lean → tuck → advanced tuck → straddle</p>
+
+                <article class="workout-card">
+                    <span>03</span>
+                    <h3>PUSH</h3>
+                    <p>
+                        Build pressing strength for handstands,
+                        HSPU, planche and advanced pushing.
+                    </p>
+                    <a href="#coach">TRAIN PUSH ↗</a>
                 </article>
+
+                <article class="workout-card">
+                    <span>04</span>
+                    <h3>CORE</h3>
+                    <p>
+                        Improve body control, compression and
+                        stability for advanced calisthenics skills.
+                    </p>
+                    <a href="#coach">TRAIN CORE ↗</a>
+                </article>
+
             </div>
+
         </section>
+
+        <section id="resources" class="section resources">
+
+    <p class="eyebrow">CALISAI RESOURCES</p>
+
+    <h2>
+        Learn the<br>
+        <em>movement.</em>
+    </h2>
+
+    <div class="resource-list">
+
+        <a href="#skills">
+            <span>01</span>
+            <div>
+                <h3>CALISTHENICS BASICS</h3>
+                <p>Understand the fundamentals of bodyweight training.</p>
+            </div>
+            <b>↗</b>
+        </a>
+
+        <a href="#skills">
+            <span>02</span>
+            <div>
+                <h3>SKILL PROGRESSIONS</h3>
+                <p>Understand how advanced skills are built step by step.</p>
+            </div>
+            <b>↗</b>
+        </a>
+
+        <a href="#coach">
+            <span>03</span>
+            <div>
+                <h3>TRAINING PRINCIPLES</h3>
+                <p>Learn about progressive overload, recovery and consistency.</p>
+            </div>
+            <b>↗</b>
+        </a>
+
+        <a href="#journey">
+            <span>04</span>
+            <div>
+                <h3>TRACK YOUR JOURNEY</h3>
+                <p>Turn your training into measurable progress.</p>
+            </div>
+            <b>↗</b>
+        </a>
+
+    </div>
+
+</section>
 
         <section id="journey" class="journey">
             <div>
@@ -131,7 +410,7 @@
         </section>
     </main>
     <footer>CALISAI © 2026 — PERSONALIZED CALISTHENICS TRAINING</footer>
-   <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
 </html>
